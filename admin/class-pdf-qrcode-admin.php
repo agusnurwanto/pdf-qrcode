@@ -105,4 +105,43 @@ class Pdf_Qrcode_Admin {
 
 	}
 
+	public function crb_absen_options()
+	{
+		global $wpdb;
+		$api_key = get_option(ABSEN_APIKEY);
+		if (empty($api_key)) {
+			$api_key = $this->functions->generateRandomString();
+			
+			update_option(ABSEN_APIKEY, $api_key);
+		}
+
+		$basic_options_container = Container::make('theme_options', 'Absensi Options')
+			->set_page_menu_position(3)
+			->add_tab('⚙️ Konfigurasi Umum', $this->generate_fields_options_konfigurasi_umum());
+	}
+
+	public function generate_fields_options_konfigurasi_umum()
+	{
+		$input_laporan_pdf = $this->functions->generatePage(array(
+			'nama_page' => 'Input Laporan Dokumen PDF',
+			'content' => '[input_laporan_dokumen_pdf]',
+			'show_header' => 1,
+			'no_key' => 1,
+			'post_status' => 'private'
+		));
+
+		return [
+			Field::make('html', 'crb_tahun_list')
+				->set_html('
+					<h5>DAFTAR TAHUN</h5>
+					<ol id="list-tahun">
+						' . $input_laporan_pdf . '
+					</ol>
+				'),
+			Field::make('text', 'crb_apikey_qrcode', 'API KEY')
+				->set_default_value($this->functions->generateRandomString())
+				->set_help_text('Wajib diisi. API KEY digunakan untuk integrasi data.')
+		];
+	}
+
 }

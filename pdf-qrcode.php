@@ -32,7 +32,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 define('QRCODE_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('QRCODE_PLUGIN_PATH', plugin_dir_path(__FILE__));
-define('QRCODE_APIKEY', '_crb_apikey_absen');
+define('QRCODE_APIKEY', '_crb_apikey_qrcode');
 
 // ============== https://carbonfields.net/ ================
 if (!defined('Carbon_Fields_Plugin\PLUGIN_FILE')) {
