@@ -105,17 +105,17 @@ class Pdf_Qrcode_Admin {
 
 	}
 
-	public function crb_absen_options()
+	public function crb_qrcode_options()
 	{
 		global $wpdb;
-		$api_key = get_option(ABSEN_APIKEY);
+		$api_key = get_option(QRCODE_APIKEY);
 		if (empty($api_key)) {
 			$api_key = $this->functions->generateRandomString();
 			
-			update_option(ABSEN_APIKEY, $api_key);
+			update_option(QRCODE_APIKEY, $api_key);
 		}
 
-		$basic_options_container = Container::make('theme_options', 'Absensi Options')
+		$basic_options_container = Container::make('theme_options', 'QRCODE Options')
 			->set_page_menu_position(3)
 			->add_tab('⚙️ Konfigurasi Umum', $this->generate_fields_options_konfigurasi_umum());
 	}
@@ -135,7 +135,7 @@ class Pdf_Qrcode_Admin {
 				->set_html('
 					<h5>DAFTAR TAHUN</h5>
 					<ol id="list-tahun">
-						' . $input_laporan_pdf . '
+						<li><a target="_blank" href="' . $input_laporan_pdf['url'] . '">' . $input_laporan_pdf['title'] . '</a></li>
 					</ol>
 				'),
 			Field::make('text', 'crb_apikey_qrcode', 'API KEY')

@@ -102,4 +102,20 @@ class Pdf_Qrcode_Public {
 
 	}
 
+	public function input_laporan_dokumen_pdf($atts)
+	{
+		if (!empty($_GET) && !empty($_GET['post'])) {
+			return '';
+		}
+		require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-input.php';
+	}
+
+	public function display_laporan_dokumen_pdf($atts)
+	{
+		if (empty($_GET) && !empty($_GET['post'])) {
+			return '';
+		}
+		require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-laporan.php';
+	}
+
 }
