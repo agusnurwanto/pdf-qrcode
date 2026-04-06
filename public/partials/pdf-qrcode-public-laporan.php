@@ -6,7 +6,6 @@ $kab_kot_pengesahan = 'Jakarta';
 $tanggal_pengesahan = '17 Maret 2026';
 $tanggal_pengesahan_english = '17th day of March 2026';
 $nomor_ahu = 'AHU.AH.12.05.01-xxx Tahun xxxx';
-$nama_ttd = 'xxx xxx';
 
 ?>
 <style>
@@ -84,6 +83,13 @@ $nama_ttd = 'xxx xxx';
 </div>
 
 <div class="certificate-container mx-auto">
+    <div class="section-box grid grid-cols-12 gap-4">
+        <div class="col-span-5">
+        </div>
+        <div class="col-span-7 italic text-right">
+            <div id="qrcode-seal" style="width: 120px; height: 120px; margin: 10px auto; display: flex; justify-content: center; align-items: center;"></div>
+        </div>
+    </div>
     <!-- 1. Negara -->
     <div class="section-box grid grid-cols-12 gap-4">
         <div class="col-span-5">
@@ -149,9 +155,6 @@ $nama_ttd = 'xxx xxx';
                     <div class="mb-4">
                         <span class="bilingual-label">9. Segel/Cap</span>
                         <span class="bilingual-sub">Seal/stamp</span>
-                        <div class="seal-placeholder">
-                            [Segel Resmi<br>Kemenkumham]
-                        </div>
                     </div>
                 </td>
                 <td style="vertical-align: top; padding: 0;" class="text-center">
@@ -169,3 +172,28 @@ $nama_ttd = 'xxx xxx';
         </table>
     </div>
 </div>
+
+<script src="https://unpkg.com/easyqrcodejs@4.6.1/dist/easy.qrcode.min.js"></script>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+        var pdfUrl = "<?php echo plugin_dir_url(dirname(dirname(__FILE__))) . 'public/dokumen/nama_file.pdf'; ?>";
+        var logoUrl = "<?php echo plugin_dir_url(dirname(dirname(__FILE__))) . 'public/img/logo.png'; ?>"; 
+        
+        var options = {
+            text: pdfUrl,
+            width: 120,
+            height: 120,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H, // Level H agar tetap bisa di-scan meskipun tertutup logo
+            logo: logoUrl,
+            logoWidth: 35,
+            logoHeight: 35,
+            logoBackgroundColor: '#ffffff',
+            logoBackgroundTransparent: false
+        };
+
+        // Inisialisasi QR Code
+        new QRCode(document.getElementById("qrcode-seal"), options);
+    });
+</script>
