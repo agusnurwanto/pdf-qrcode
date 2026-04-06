@@ -118,4 +118,38 @@ class Pdf_Qrcode_Public {
 		require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-laporan.php';
 	}
 
+	public function submit_pdf_qrcode_input()
+	{
+		global $wpdb;
+
+		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+			wp_send_json_error(array('message' => 'Invalid request method.'));
+		}
+
+		$api_key = isset($_POST['api_key']) ? sanitize_text_field($_POST['api_key']) : '';
+		
+		// Validasi API Key. Anda dapat mengubah '1234567890' sesuai dengan key yang diinginkan.
+		if ($api_key !== '1234567890') {
+			wp_send_json_error(array('message' => 'Invalid API Key. Akses ditolak.'));
+		}
+
+		$data = array(
+			'nama_ttd' => isset($_POST['nama_ttd']) ? sanitize_text_field($_POST['nama_ttd']) : '',
+			'kab_kota_notaris' => isset($_POST['kab_kota_notaris']) ? sanitize_text_field($_POST['kab_kota_notaris']) : '',
+			'nama_notaris' => isset($_POST['nama_notaris']) ? sanitize_text_field($_POST['nama_notaris']) : '',
+			'kab_kot_pengesahan' => isset($_POST['kab_kot_pengesahan']) ? sanitize_text_field($_POST['kab_kot_pengesahan']) : '',
+			'tanggal_pengesahan' => isset($_POST['tanggal_pengesahan']) ? sanitize_text_field($_POST['tanggal_pengesahan']) : '',
+			'tanggal_pengesahan_english' => isset($_POST['tanggal_pengesahan_english']) ? sanitize_text_field($_POST['tanggal_pengesahan_english']) : '',
+			'nomor_ahu' => isset($_POST['nomor_ahu']) ? sanitize_text_field($_POST['nomor_ahu']) : '',
+		);
+
+		$inserted = $wpdb->insert('qrcode_data_dokumen', $data);
+
+		if ($inserted) {
+			wp_send_json_success(array('message' => 'Data berhasil disimpan.'));
+		} else {
+			wp_send_json_error(array('message' => 'Gagal menyimpan data ke database.'));
+		}
+	}
+
 }

@@ -140,8 +140,31 @@ class Pdf_Qrcode_Admin {
 				'),
 			Field::make('text', 'crb_apikey_qrcode', 'API KEY')
 				->set_default_value($this->functions->generateRandomString())
-				->set_help_text('Wajib diisi. API KEY digunakan untuk integrasi data.')
+				->set_help_text('Wajib diisi. API KEY digunakan untuk integrasi data.'),
+			Field::make('html', 'crb_sql_migrate')
+				->set_html('
+					<div style="margin-top: 15px;">
+						<button type="button" id="btn-sql-migrate" class="button button-primary" style="margin-bottom: 5px;">Migrate SQL</button>
+						<p id="sql-migrate-msg" style="margin: 0; font-weight: bold;"></p>
+					</div>
+				')
 		];
+	}
+
+	public function migrate_sql() {
+		global $wpdb;
+		$sql_file = plugin_dir_path(dirname(__FILE__)) . 'table.sql';
+		
+		if (file_exists($sql_file)) {
+			$sql = file_get_contents($sql_file);
+			
+			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+			dbDelta($sql);
+			
+			wp_send_json_success(array('message' => 'Tabel berhasil dibuat atau diperbarui.'));
+		} else {
+			wp_send_json_error(array('message' => 'File table.sql tidak ditemukan.'));
+		}
 	}
 
 }

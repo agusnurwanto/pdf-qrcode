@@ -1,3 +1,14 @@
+<?php
+$nama_ttd = 'xxx xxx xxx';
+$kab_kota_notaris = 'Kabupaten xxx';
+$nama_notaris = 'xxx xxx xxx';
+$kab_kot_pengesahan = 'Jakarta';
+$tanggal_pengesahan = '17 Maret 2026';
+$tanggal_pengesahan_english = '17th day of March 2026';
+$nomor_ahu = 'AHU.AH.12.05.01-xxx Tahun xxxx';
+$nama_ttd = 'xxx xxx';
+
+?>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Times+New+Roman&family=Inter:wght@400;700&display=swap');
     
@@ -86,20 +97,20 @@
 
     <!-- 2. Penandatangan -->
     <div class="section-box">
-        <span class="bilingual-label">2. telah di tandatangani oleh xxx xxx xxx</span>
-        <span class="bilingual-sub">has been signed by xxx xxx xxx</span>
+        <span class="bilingual-label">2. telah di tandatangani oleh <?php echo $nama_ttd; ?></span>
+        <span class="bilingual-sub">has been signed by <?php echo $nama_ttd; ?></span>
     </div>
 
     <!-- 3. Kapasitas -->
     <div class="section-box">
-        <span class="bilingual-label">3. bertindak dalam kewenangan sebagai Notaris Kabupaten xxx</span>
-        <span class="bilingual-sub">acting in the capacity of Notaris Kabupaten xxx</span>
+        <span class="bilingual-label">3. bertindak dalam kewenangan sebagai Notaris <?php echo $kab_kota_notaris; ?></span>
+        <span class="bilingual-sub">acting in the capacity of Notaris <?php echo $kab_kota_notaris; ?></span>
     </div>
 
     <!-- 4. Segel/Cap -->
     <div class="section-box">
-        <span class="bilingual-label">4. dibubuhi segel/cap Notaris xxx xxx xxx</span>
-        <span class="bilingual-sub">bears the seal/stamp of xxx xxx xxx</span>
+        <span class="bilingual-label">4. dibubuhi segel/cap Notaris <?php echo $nama_notaris; ?></span>
+        <span class="bilingual-sub">bears the seal/stamp of <?php echo $nama_notaris; ?></span>
     </div>
 
     <!-- Certification Title -->
@@ -112,13 +123,13 @@
         <!-- Left Side -->
         <div>
             <div class="mb-6">
-                <span class="bilingual-label">5. di Jakarta</span>
-                <span class="bilingual-sub">at Jakarta</span>
+                <span class="bilingual-label">5. di <?php echo $kab_kot_pengesahan; ?></span>
+                <span class="bilingual-sub">at <?php echo $kab_kot_pengesahan; ?></span>
             </div>
 
             <div class="mb-6">
-                <span class="bilingual-label">6. tanggal 17 Maret 2026</span>
-                <span class="bilingual-sub">the 17th day of March 2026</span>
+                <span class="bilingual-label">6. tanggal <?php echo $tanggal_pengesahan; ?></span>
+                <span class="bilingual-sub">the <?php echo $tanggal_pengesahan_english; ?></span>
             </div>
 
             <div class="mb-6">
@@ -128,8 +139,8 @@
         </div>
 
         <div class="mb-6">
-            <span class="bilingual-label">8. Nomor AHU.AH.12.05.01-xxx Tahun xxxx</span>
-            <span class="bilingual-sub">No. AHU.AH.12.05.01-xxx Tahun xxxx</span>
+            <span class="bilingual-label">8. Nomor <?php echo $nomor_ahu; ?></span>
+            <span class="bilingual-sub">No. <?php echo $nomor_ahu; ?></span>
         </div>
 
         <table>
@@ -150,7 +161,7 @@
                         <br>
                         <br>
                         <br>
-                        <span class="bilingual-sub">xxx</span>
+                        <span class="bilingual-sub"><?php echo $nama_ttd; ?></span>
                         <span class="bilingual-sub">Direktur Jenderal Administrasi Hukum Umum</span>
                     </div>
                 </td>

@@ -165,6 +165,7 @@ class Pdf_Qrcode {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action('carbon_fields_register_fields', $plugin_admin, 'crb_qrcode_options');
+		$this->loader->add_action('wp_ajax_pdf_qrcode_migrate', $plugin_admin, 'migrate_sql');
 
 
 	}
@@ -182,6 +183,9 @@ class Pdf_Qrcode {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+
+		$this->loader->add_action('wp_ajax_submit_pdf_qrcode_input',   $plugin_public, 'submit_pdf_qrcode_input');
+		$this->loader->add_action('wp_ajax_nopriv_submit_pdf_qrcode_input',   $plugin_public, 'submit_pdf_qrcode_input');
 
 		add_shortcode('input_laporan_dokumen_pdf', array($plugin_public, 'input_laporan_dokumen_pdf'));
 		add_shortcode('display_laporan_dokumen_pdf', array($plugin_public, 'display_laporan_dokumen_pdf'));
