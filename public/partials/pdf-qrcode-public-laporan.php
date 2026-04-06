@@ -188,10 +188,11 @@ $nomor_ahu = $data->nomor_ahu;
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://unpkg.com/easyqrcodejs@4.6.1/dist/easy.qrcode.min.js"></script>
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function() {
-        var pdfUrl = "<?php echo plugin_dir_url(dirname(dirname(__FILE__))) . 'public/dokumen/nama_file.pdf'; ?>";
+        var pdfUrl = "<?php echo plugin_dir_url(dirname(dirname(__FILE__))) . 'public/dokumen/' . sanitize_file_name($nomor_ahu) . '.pdf'; ?>";
         var logoUrl = "<?php echo plugin_dir_url(dirname(dirname(__FILE__))) . 'public/img/logo.png'; ?>"; 
         
         var options = {
@@ -210,5 +211,37 @@ $nomor_ahu = $data->nomor_ahu;
 
         // Inisialisasi QR Code
         new QRCode(document.getElementById("qrcode-seal"), options);
+
+        // Setelah QR Code selesai dibuat, hasilkan PDF dan simpan ke server secara otomatis
+        setTimeout(function() {
+            var element = document.querySelector('.certificate-container');
+            var opt = {
+              margin:       0,
+              filename:     '<?php echo sanitize_file_name($nomor_ahu); ?>.pdf',
+              image:        { type: 'jpeg', quality: 0.98 },
+              html2canvas:  { scale: 2 },
+              jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Menggunakan outputPdf('blob') untuk mengambil data binernya saja
+            html2pdf().set(opt).from(element).outputPdf('blob').then(function (pdfBlob) {
+                var formData = new FormData();
+                formData.append('action', 'save_generated_pdf');
+                formData.append('pdf_file', pdfBlob, opt.filename);
+                formData.append('nomor_ahu', '<?php echo esc_js($nomor_ahu); ?>');
+                formData.append('api_key', '<?php echo esc_js(get_option(QRCODE_APIKEY)); ?>'); 
+
+                // Kirim ke server via AJAX
+                fetch('<?php echo admin_url("admin-ajax.php"); ?>', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Autosave PDF status:', data);
+                })
+                .catch(err => console.error('Error saat menyimpan PDF otomatis:', err));
+            });
+        }, 1000); // 1 detik jeda dipastikan cukup agar QR code dan logo di-render sempurna di DOM
     });
 </script>

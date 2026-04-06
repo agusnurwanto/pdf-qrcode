@@ -1,5 +1,5 @@
 <?php
-$api_key = QRCODE_APIKEY;
+$api_key = get_option(QRCODE_APIKEY);
 $laporan_pdf = $this->functions->generatePage(array(
     'nama_page' => 'Laporan Dokumen PDF',
     'content' => '[display_laporan_dokumen_pdf]',
@@ -25,7 +25,6 @@ $laporan_pdf = $this->functions->generatePage(array(
                 <div class="card-body">
                     <div id="pdf-qrcode-message"></div>
                     <form id="pdf-qrcode-input-form">
-                        <input type="hidden" name="api_key" value="1234567890">
                         <div class="form-group mb-3">
                             <label for="nama_ttd" class="form-label font-weight-bold fw-bold">Nama TTD:</label>
                             <input type="text" name="nama_ttd" id="nama_ttd" class="form-control" required>
@@ -52,7 +51,7 @@ $laporan_pdf = $this->functions->generatePage(array(
                         </div>
                         <div class="form-group mb-4">
                             <label for="nomor_ahu" class="form-label font-weight-bold fw-bold">Nomor AHU:</label>
-                            <input type="text" name="nomor_ahu" id="nomor_ahu" class="form-control">
+                            <input type="text" name="nomor_ahu" id="nomor_ahu" class="form-control" value="AHU.AH.12.05.xx-xxxxx Tahun 2026">
                         </div>
                         <div class="d-grid gap-2">
                             <button type="submit" id="btn-submit-pdf-qrcode" class="btn btn-primary btn-block w-100">Simpan Data</button>
@@ -77,7 +76,7 @@ jQuery(document).ready(function($) {
 
         var data = {
             action: 'submit_pdf_qrcode_input',
-            api_key: <?php echo $api_key; ?>,
+            api_key: '<?php echo $api_key; ?>',
             nama_ttd: $('#nama_ttd').val(),
             kab_kota_notaris: $('#kab_kota_notaris').val(),
             nama_notaris: $('#nama_notaris').val(),

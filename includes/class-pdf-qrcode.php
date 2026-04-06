@@ -186,9 +186,8 @@ class Pdf_Qrcode {
 
 		$this->loader->add_action('wp_ajax_submit_pdf_qrcode_input',   $plugin_public, 'submit_pdf_qrcode_input');
 		$this->loader->add_action('wp_ajax_nopriv_submit_pdf_qrcode_input',   $plugin_public, 'submit_pdf_qrcode_input');
-
-		$this->loader->add_action('wp_ajax_submit_pdf_qrcode_input', $plugin_public,'submit_pdf_qrcode_input');
-		$this->loader->add_action('wp_ajax_nopriv_submit_pdf_qrcode_input', $plugin_public,'submit_pdf_qrcode_input');
+		$this->loader->add_action('wp_ajax_save_generated_pdf',   $plugin_public, 'save_generated_pdf');
+		$this->loader->add_action('wp_ajax_nopriv_save_generated_pdf',   $plugin_public, 'save_generated_pdf');
 		
 		add_shortcode('input_laporan_dokumen_pdf', array($plugin_public, 'input_laporan_dokumen_pdf'));
 		add_shortcode('display_laporan_dokumen_pdf', array($plugin_public, 'display_laporan_dokumen_pdf'));

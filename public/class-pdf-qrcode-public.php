@@ -142,9 +142,22 @@ class Pdf_Qrcode_Public {
 
 		$api_key = isset($_POST['api_key']) ? sanitize_text_field($_POST['api_key']) : '';
 		
-		// Validasi API Key. Anda dapat mengubah '1234567890' sesuai dengan key yang diinginkan.
-		if ($api_key !== '1234567890') {
+		if ($api_key !== get_option(QRCODE_APIKEY)) {
 			wp_send_json_error(array('message' => 'Invalid API Key. Akses ditolak.'));
+		}
+
+		$nomor_ahu_input = isset($_POST['nomor_ahu']) ? sanitize_text_field($_POST['nomor_ahu']) : '';
+
+		// Tambahan validasi: cek apakah nomor_ahu sudah ada di database
+		if (!empty($nomor_ahu_input)) {
+			$existing_data = $wpdb->get_var($wpdb->prepare(
+				"SELECT COUNT(*) FROM qrcode_data_dokumen WHERE nomor_ahu = %s",
+				$nomor_ahu_input
+			));
+
+			if ($existing_data > 0) {
+				wp_send_json_error(array('message' => 'Gagal menyimpan: Nomor AHU sudah terdaftar dalam sistem.'));
+			}
 		}
 
 		$data = array(
@@ -154,7 +167,7 @@ class Pdf_Qrcode_Public {
 			'kab_kot_pengesahan' => isset($_POST['kab_kot_pengesahan']) ? sanitize_text_field($_POST['kab_kot_pengesahan']) : '',
 			'tanggal_pengesahan' => isset($_POST['tanggal_pengesahan']) ? sanitize_text_field($_POST['tanggal_pengesahan']) : '',
 			'tanggal_pengesahan_english' => isset($_POST['tanggal_pengesahan_english']) ? sanitize_text_field($_POST['tanggal_pengesahan_english']) : '',
-			'nomor_ahu' => isset($_POST['nomor_ahu']) ? sanitize_text_field($_POST['nomor_ahu']) : '',
+			'nomor_ahu' => $nomor_ahu_input,
 		);
 
 		$inserted = $wpdb->insert('qrcode_data_dokumen', $data);
@@ -163,6 +176,34 @@ class Pdf_Qrcode_Public {
 			wp_send_json_success(array('message' => 'Data berhasil disimpan.'));
 		} else {
 			wp_send_json_error(array('message' => 'Gagal menyimpan data ke database.'));
+		}
+	}
+
+	public function save_generated_pdf()
+	{
+		$api_key = isset($_POST['api_key']) ? sanitize_text_field($_POST['api_key']) : '';
+		
+		if ($api_key !== get_option(QRCODE_APIKEY)) {
+			wp_send_json_error(array('message' => 'Invalid API Key. Akses ditolak.'));
+		}
+
+		if (empty($_FILES['pdf_file']) || empty($_POST['nomor_ahu'])) {
+			wp_send_json_error(array('message' => 'Data tidak lengkap.'));
+		}
+
+		$nomor_ahu = sanitize_file_name($_POST['nomor_ahu']);
+		$upload_dir = QRCODE_PLUGIN_PATH . 'public/dokumen/';
+		
+		if (!file_exists($upload_dir)) {
+			wp_mkdir_p($upload_dir);
+		}
+
+		$file_path = $upload_dir . $nomor_ahu . '.pdf';
+		
+		if (move_uploaded_file($_FILES['pdf_file']['tmp_name'], $file_path)) {
+			wp_send_json_success(array('message' => 'PDF berhasil disimpan.', 'file' => $nomor_ahu . '.pdf'));
+		} else {
+			wp_send_json_error(array('message' => 'Gagal menyimpan file PDF.'));
 		}
 	}
 
