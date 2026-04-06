@@ -74,7 +74,7 @@ class Pdf_Qrcode_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
+		wp_enqueue_style($this->plugin_name . 'bootstrap', plugin_dir_url(__FILE__) . 'css/bootstrap.min.css', array(), $this->version, 'all');
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/pdf-qrcode-public.css', array(), $this->version, 'all' );
 
 	}
@@ -112,10 +112,24 @@ class Pdf_Qrcode_Public {
 
 	public function display_laporan_dokumen_pdf($atts)
 	{
-		if (empty($_GET) && !empty($_GET['post'])) {
-			return '';
+		if (isset($_GET['action'])) {
+
+			if ($_GET['action'] == 'input') {
+				require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-input.php';
+
+			} elseif ($_GET['action'] == 'view') {
+				require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-view.php';
+
+			} elseif ($_GET['action'] == 'laporan') {
+				require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-laporan.php';
+
+			} else {
+				require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-history.php';
+			}
+
+		} else {
+			require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-history.php';
 		}
-		require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-laporan.php';
 	}
 
 	public function submit_pdf_qrcode_input()

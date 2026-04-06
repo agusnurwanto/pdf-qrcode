@@ -25,6 +25,7 @@ $laporan_pdf = $this->functions->generatePage(array(
                 <div class="card-body">
                     <div id="pdf-qrcode-message"></div>
                     <form id="pdf-qrcode-input-form">
+                        <input type="hidden" name="api_key" value="1234567890">
                         <div class="form-group mb-3">
                             <label for="nama_ttd" class="form-label font-weight-bold fw-bold">Nama TTD:</label>
                             <input type="text" name="nama_ttd" id="nama_ttd" class="form-control" required>

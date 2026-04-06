@@ -9,3 +9,26 @@ jQuery(document).ready(function($) {
         jQuery('body').prepend(loading);
     }
 });
+jQuery(document).ready(function ($) {
+    $('#pdf-qrcode-input-form').on('submit', function (e) {
+        e.preventDefault();
+
+        let formData = $(this).serialize();
+
+        $.ajax({
+            url: '/pdfqrcode/wp-admin/admin-ajax.php',
+            type: 'POST',
+            data: formData + '&action=submit_pdf_qrcode_input',
+
+            success: function (response) {
+                console.log(response); // debug
+                alert(response.data.message);
+                location.reload();
+            },
+            error: function (err) {
+                console.log(err);
+                alert('Terjadi error');
+            }
+        });
+    });
+});

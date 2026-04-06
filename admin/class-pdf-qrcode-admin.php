@@ -79,7 +79,13 @@ class Pdf_Qrcode_Admin {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/pdf-qrcode-admin.css', array(), $this->version, 'all' );
-
+		// Bootstrap Icons CDN
+		wp_enqueue_style(
+			'bootstrap-icons',
+			'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css',
+			array(),
+			null
+		);
 	}
 
 	/**

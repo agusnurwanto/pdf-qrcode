@@ -1,12 +1,27 @@
 <?php
-$nama_ttd = 'xxx xxx xxx';
-$kab_kota_notaris = 'Kabupaten xxx';
-$nama_notaris = 'xxx xxx xxx';
-$kab_kot_pengesahan = 'Jakarta';
-$tanggal_pengesahan = '17 Maret 2026';
-$tanggal_pengesahan_english = '17th day of March 2026';
-$nomor_ahu = 'AHU.AH.12.05.01-xxx Tahun xxxx';
+global $wpdb;
 
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+
+$data = $wpdb->get_row(
+    $wpdb->prepare(
+        "SELECT * FROM qrcode_data_dokumen WHERE id = %d",
+        $id
+    )
+);
+
+if (!$data) {
+    echo "Data tidak ditemukan";
+    exit;
+}
+
+$nama_ttd = $data->nama_ttd;
+$kab_kota_notaris = $data->kab_kota_notaris;
+$nama_notaris = $data->nama_notaris;
+$kab_kot_pengesahan = $data->kab_kot_pengesahan;
+$tanggal_pengesahan = $data->tanggal_pengesahan;
+$tanggal_pengesahan_english = $data->tanggal_pengesahan_english;
+$nomor_ahu = $data->nomor_ahu;
 ?>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Times+New+Roman&family=Inter:wght@400;700&display=swap');
