@@ -111,27 +111,46 @@ class Pdf_Qrcode_Public {
 	}
 
 	public function display_laporan_dokumen_pdf($atts)
-	{
-		if (isset($_GET['action'])) {
+{
+    if (isset($_GET['action'])) {
 
-			if ($_GET['action'] == 'input') {
-				require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-input.php';
+        if ($_GET['action'] == 'input') {
+            require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-input.php';
 
-			} elseif ($_GET['action'] == 'view') {
-				require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-view.php';
+        } elseif ($_GET['action'] == 'view') {
+            require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-view.php';
 
-			} elseif ($_GET['action'] == 'laporan') {
-				require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-laporan.php';
+        } elseif ($_GET['action'] == 'laporan') {
+            require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-laporan.php';
 
-			} else {
-				require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-history.php';
-			}
+        } elseif ($_GET['action'] == 'delete') {
+            global $wpdb;
 
-		} else {
-			require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-history.php';
-		}
-	}
+            if (isset($_GET['id'])) {
+                $id = intval($_GET['id']);
 
+                $deleted = $wpdb->delete(
+                    'qrcode_data_dokumen',
+                    ['id' => $id],
+                    ['%d']
+                );
+
+                if ($deleted) {
+                    echo "<script>alert('Data berhasil dihapus'); window.location.href='?';</script>";
+                } else {
+                    echo "<script>alert('Gagal hapus data'); window.location.href='?';</script>";
+                }
+                exit;
+            }
+
+        } else {
+            require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-history.php';
+        }
+
+    } else {
+        require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-history.php';
+    }
+}
 	public function submit_pdf_qrcode_input()
 	{
 		global $wpdb;
