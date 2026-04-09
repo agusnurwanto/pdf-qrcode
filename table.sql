@@ -7,6 +7,7 @@ CREATE TABLE `qrcode_data_dokumen` (
   `tanggal_pengesahan` varchar(225) DEFAULT NULL,
   `tanggal_pengesahan_english` varchar(225) DEFAULT NULL,
   `nomor_ahu` varchar(225) DEFAULT NULL,
+  `cekupdate` INT(1) DEFAULT 0,
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `update_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` DATETIME DEFAULT NULL,

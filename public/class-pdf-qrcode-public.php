@@ -111,46 +111,46 @@ class Pdf_Qrcode_Public {
 	}
 
 	public function display_laporan_dokumen_pdf($atts)
-{
-    if (isset($_GET['action'])) {
+	{
+		if (isset($_GET['action'])) {
 
-        if ($_GET['action'] == 'input') {
-            require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-input.php';
+			if ($_GET['action'] == 'input') {
+				require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-input.php';
 
-        } elseif ($_GET['action'] == 'view') {
-            require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-view.php';
+			} elseif ($_GET['action'] == 'view') {
+				require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-view.php';
 
-        } elseif ($_GET['action'] == 'laporan') {
-            require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-laporan.php';
+			} elseif ($_GET['action'] == 'laporan') {
+				require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-laporan.php';
 
-        } elseif ($_GET['action'] == 'delete') {
-            global $wpdb;
+			} elseif ($_GET['action'] == 'delete') {
+				global $wpdb;
 
-            if (isset($_GET['id'])) {
-                $id = intval($_GET['id']);
+				if (isset($_GET['id'])) {
+					$id = intval($_GET['id']);
 
-                $deleted = $wpdb->delete(
-                    'qrcode_data_dokumen',
-                    ['id' => $id],
-                    ['%d']
-                );
+					$deleted = $wpdb->delete(
+						'qrcode_data_dokumen',
+						['id' => $id],
+						['%d']
+					);
 
-                if ($deleted) {
-                    echo "<script>alert('Data berhasil dihapus'); window.location.href='?';</script>";
-                } else {
-                    echo "<script>alert('Gagal hapus data'); window.location.href='?';</script>";
-                }
-                exit;
-            }
+					if ($deleted) {
+						echo "<script>alert('Data berhasil dihapus'); window.location.href='?';</script>";
+					} else {
+						echo "<script>alert('Gagal hapus data'); window.location.href='?';</script>";
+					}
+					exit;
+				}
 
-        } else {
-            require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-history.php';
-        }
+			} else {
+				require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-history.php';
+			}
 
-    } else {
-        require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-history.php';
-    }
-}
+		} else {
+			require_once QRCODE_PLUGIN_PATH . 'public/partials/pdf-qrcode-public-history.php';
+		}
+	}
 	public function submit_pdf_qrcode_input()
 	{
 		global $wpdb;
@@ -187,7 +187,9 @@ class Pdf_Qrcode_Public {
 			'tanggal_pengesahan' => isset($_POST['tanggal_pengesahan']) ? sanitize_text_field($_POST['tanggal_pengesahan']) : '',
 			'tanggal_pengesahan_english' => isset($_POST['tanggal_pengesahan_english']) ? sanitize_text_field($_POST['tanggal_pengesahan_english']) : '',
 			'nomor_ahu' => $nomor_ahu_input,
-		);
+
+			'cekupdate' => 1
+			);
 
 		$inserted = $wpdb->insert('qrcode_data_dokumen', $data);
 
@@ -200,6 +202,8 @@ class Pdf_Qrcode_Public {
 
 	public function save_generated_pdf()
 	{
+		global $wpdb;
+
 		$api_key = isset($_POST['api_key']) ? sanitize_text_field($_POST['api_key']) : '';
 		
 		if ($api_key !== get_option(QRCODE_APIKEY)) {
@@ -218,11 +222,65 @@ class Pdf_Qrcode_Public {
 		}
 
 		$file_path = $upload_dir . $nomor_ahu . '.pdf';
+
+		if (file_exists($file_path)) {
+			unlink($file_path); 
+		}
 		
 		if (move_uploaded_file($_FILES['pdf_file']['tmp_name'], $file_path)) {
-			wp_send_json_success(array('message' => 'PDF berhasil disimpan.', 'file' => $nomor_ahu . '.pdf'));
+
+			$wpdb->update(
+				'qrcode_data_dokumen',
+				['cekupdate' => 0],
+				['nomor_ahu' => $nomor_ahu]
+			);
+
+			wp_send_json_success(array(
+				'message' => 'PDF berhasil disimpan.',
+				'file' => $nomor_ahu . '.pdf'
+			)); 
+			
 		} else {
 			wp_send_json_error(array('message' => 'Gagal menyimpan file PDF.'));
+		}
+	}
+
+	public function update_pdf_qrcode_data()
+	{
+		global $wpdb;
+
+		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+			wp_send_json_error(['message' => 'Invalid request']);
+		}
+
+		$id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+
+		if (!$id) {
+			wp_send_json_error(['message' => 'ID tidak valid']);
+		}
+
+		$data = [
+			'nama_ttd' => sanitize_text_field($_POST['nama_ttd']),
+			'kab_kota_notaris' => sanitize_text_field($_POST['kab_kota_notaris']),
+			'nama_notaris' => sanitize_text_field($_POST['nama_notaris']),
+			'kab_kot_pengesahan' => sanitize_text_field($_POST['kab_kot_pengesahan']),
+			'tanggal_pengesahan' => sanitize_text_field($_POST['tanggal_pengesahan']),
+			'tanggal_pengesahan_english' => sanitize_text_field($_POST['tanggal_pengesahan_english']),
+			'nomor_ahu' => sanitize_text_field($_POST['nomor_ahu']),
+			
+			'cekupdate' => 1
+		];
+
+		$updated = $wpdb->update(
+			'qrcode_data_dokumen',
+			$data,
+			['id' => $id]
+		);
+
+		if ($updated !== false) {
+			wp_send_json_success(['message' => 'Data berhasil diupdate']);
+		} else {
+			wp_send_json_error(['message' => 'Gagal update']);
 		}
 	}
 

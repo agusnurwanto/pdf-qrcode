@@ -153,7 +153,9 @@ class Pdf_Qrcode_Admin {
 						<button type="button" id="btn-sql-migrate" class="button button-primary" style="margin-bottom: 5px;">Migrate SQL</button>
 						<p id="sql-migrate-msg" style="margin: 0; font-weight: bold;"></p>
 					</div>
-				')
+				'),
+			Field::make('image', 'crb_logo_qrcode', 'Logo QR Code')
+    			->set_help_text('Upload logo untuk ditampilkan di tengah QR Code'),
 		];
 	}
 
