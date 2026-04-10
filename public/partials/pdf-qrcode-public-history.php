@@ -23,32 +23,34 @@ $data = $wpdb->get_results("SELECT * FROM qrcode_data_dokumen ORDER BY id DESC")
         </thead>
         <tbody>
             <?php foreach ($data as $row): ?>
-                <tr class="text-center">
+                <tr>
                     
-                    <!-- Nama Dokumen Dinamis -->
-                    <td>
-                        <?= esc_html($row->nama_notaris . ' - ' . $row->nomor_ahu); ?>
+                    <!-- Nama Dokumen -->
+                    <td class="text-start">
+                        <?= esc_html($row->nama_notaris . ' - ' . $row->kab_kot_pengesahan); ?>
                     </td>
 
                     <!-- No AHU -->
-                    <td><?= esc_html($row->nomor_ahu); ?></td>
+                    <td class="text-center"><?= esc_html($row->nomor_ahu); ?></td>
 
                     <!-- Tanggal Pengesahan -->
-                    <td><?= esc_html($row->tanggal_pengesahan); ?></td>
+                    <td class="text-center"><?= esc_html($row->tanggal_pengesahan); ?></td>
 
                     <!-- Aksi -->
                     <td class="aksi-btn">
-                        <a href="?action=laporan&id=<?= $row->id; ?>" class="btn btn-success btn-sm px-2 py-1" title="Lihat Sertifikat">
-                            <span class="dashicons dashicons-visibility"></span>
-                        </a>
+                        <div class="d-flex justify-content-center gap-2">
+                            <a href="?action=laporan&id=<?= $row->id; ?>" class="btn btn-success btn-sm px-2 py-1" title="Lihat Sertifikat">
+                                <span class="dashicons dashicons-visibility"></span>
+                            </a>
 
-                        <a href="?action=input&id=<?= $row->id; ?>" class="btn btn-warning btn-sm px-2 py-1" title="Edit">
-                            <span class="dashicons dashicons-edit"></span>
-                        </a>
+                            <a href="?action=input&id=<?= $row->id; ?>" class="btn btn-warning btn-sm px-2 py-1" title="Edit">
+                                <span class="dashicons dashicons-edit"></span>
+                            </a>
 
-                        <a href="?action=delete&id=<?= $row->id; ?>" class="btn btn-danger btn-sm px-2 py-1" title="Hapus" onclick="return confirm('Yakin hapus data?')">
-                            <span class="dashicons dashicons-trash"></span>
-                        </a>
+                            <a href="?action=delete&id=<?= $row->id; ?>" class="btn btn-danger btn-sm px-2 py-1" title="Hapus" onclick="return confirm('Yakin hapus data?')">
+                                <span class="dashicons dashicons-trash"></span>
+                            </a>
+                        </div>
                     </td>
 
                 </tr>
